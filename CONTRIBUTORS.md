@@ -5,7 +5,6 @@ Chiba Covid19 response site contributors
 
 | Name(link) | Contribution |
 | --- | --- | 
-| [Hal Seki(Code for Japan)](https://github.com/halsk) | Project facilitation |
 | [ayamurata](https://github.com/ayamurata093) | Frontend,translator(en) | 
 | [Katsunori Takahashi(Code for Nagareyama/Tokatsu)](https://github.com/K2nori) | Data Check | 
 | [MasaoHaba(TeraWatcher inc.)](https://github.com/HabaMasao) | Backend | 
