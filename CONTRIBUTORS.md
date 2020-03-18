@@ -7,7 +7,7 @@ Chiba Covid19 response site contributors
 | --- | --- | 
 | [ayamurata](https://github.com/ayamurata093) | Frontend,translator(en) | 
 | [Katsunori Takahashi(Code for Nagareyama/Tokatsu)](https://github.com/K2nori) | Data Check | 
-| [MasaoHaba(TeraWatcher inc.)](https://github.com/HabaMasao) | Backend | 
+| [MasaoHaba(TeraWatcher inc.)](https://github.com/HabaMasao) | Backend |
 | [MiyukiShirasawa(CIvicTechZenChiba)](https://github.com/MiyukiShirasawa) | Project facilitation | 
 | [nekakoshi(Weatherlight Inc)](https://twitter.com/nekakoshi) | Programmer | 
 | [OkutoOyama(CrowdWorks inc.)](https://github.com/yamanoku)| Frontend, A11y Developer | 
