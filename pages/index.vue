@@ -81,7 +81,6 @@
 
 <script>
 import PageHeader from '@/components/PageHeader.vue'
-import TimeBarChart from '@/components/TimeBarChart.vue'
 import TimeStackedBarChart from '@/components/TimeStackedBarChart.vue'
 import WhatsNew from '@/components/WhatsNew.vue'
 import StaticInfo from '@/components/StaticInfo.vue'
@@ -115,9 +114,9 @@ export default {
     // 退院者数
     const dischargesTable = formatTable(Data.discharges.data)
     // 相談件数
-    //const contactsGraph = formatGraph(Data.contacts.data)
+    // const contactsGraph = formatGraph(Data.contacts.data)
     // 帰国者・接触者電話相談センター相談件数
-    //const querentsGraph = formatGraph(Data.querents.data)
+    // const querentsGraph = formatGraph(Data.querents.data)
     // 都営地下鉄の利用者数の推移
     // 検査実施日別状況
     const inspectionsGraph = [
