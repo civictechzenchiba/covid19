@@ -6,7 +6,10 @@ https://hackmd.io/9TTyyjchR8ufuMd9z08Rcg?view
   千葉県のサイト
 https://www.pref.chiba.lg.jp/index.html
 
-対策サイトを作って、がんばろー！（うまい方言がない）
+  千葉県版新型コロナウィルス対策サイト
+https://covid19.civictech.chiba.jp/
+
+対策サイトを作って、がんばろう千葉
 
 ### 日本語 | [English](./README_EN.md) | [Spanish](./README_ES.md)
 
