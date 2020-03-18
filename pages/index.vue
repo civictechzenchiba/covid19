@@ -158,6 +158,8 @@ export default {
       patientsGraph,
       dischargesTable,
       dischargesGraph,
+      // contactsGraph,
+      // querentsGraph,
       inspectionsGraph,
       inspectionsItems,
       inspectionsLabels,
