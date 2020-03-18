@@ -75,30 +75,6 @@
           :unit="'件'"
         />
       </v-col>
-      <!--
-      <v-col cols="12" md="6" class="DataCard">
-        <time-bar-chart
-          title="新型コロナコールセンター相談件数"
-          :title-id="'number-of-reports-to-covid19-telephone-advisory-center'"
-          :chart-id="'time-bar-chart-contacts'"
-          :chart-data="contactsGraph"
-          :date="Data.contacts.date"
-          :unit="'件'"
-          :url="''"
-        />
-      </v-col>
-      <v-col cols="12" md="6" class="DataCard">
-        <time-bar-chart
-          title="帰国者接触者センター相談件数"
-          :title-id="'number-of-reports-to-covid19-consultation-desk'"
-          :chart-id="'time-bar-chart-querents'"
-          :chart-data="querentsGraph"
-          :date="Data.querents.date"
-          :unit="'件'"
-          :url="''"
-        />
-      </v-col>
-      -->
     </v-row>
   </div>
 </template>
@@ -139,9 +115,9 @@ export default {
     // 退院者数
     const dischargesTable = formatTable(Data.discharges.data)
     // 相談件数
-    const contactsGraph = formatGraph(Data.contacts.data)
+    //const contactsGraph = formatGraph(Data.contacts.data)
     // 帰国者・接触者電話相談センター相談件数
-    const querentsGraph = formatGraph(Data.querents.data)
+    //const querentsGraph = formatGraph(Data.querents.data)
     // 都営地下鉄の利用者数の推移
     // 検査実施日別状況
     const inspectionsGraph = [
@@ -182,8 +158,6 @@ export default {
       patientsGraph,
       dischargesTable,
       dischargesGraph,
-      contactsGraph,
-      querentsGraph,
       inspectionsGraph,
       inspectionsItems,
       inspectionsLabels,
