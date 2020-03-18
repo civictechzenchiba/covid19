@@ -1,12 +1,9 @@
 # 新型コロナウイルス感染症対策サイト[千葉県版]
-
-  各地で立ち上がっているサイトのまとめ
+　各地で立ち上がっているサイトのまとめ
 https://hackmd.io/9TTyyjchR8ufuMd9z08Rcg?view
-
-  千葉県のサイト
+　千葉県のサイト
 https://www.pref.chiba.lg.jp/index.html
-
-  千葉県版新型コロナウィルス対策サイト
+　千葉県版新型コロナウィルス対策サイト
 https://covid19.civictech.chiba.jp/
 
 対策サイトを作って、がんばろう千葉
