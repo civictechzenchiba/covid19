@@ -84,15 +84,29 @@
             />
           </a>
           <div class="sponsor">
-            Data by:<br />
-            <a
-              href="https://www.pref.chiba.lg.jp/"
-              target="_blank"
-              rel="noopener"
-              class="sponsor__pref"
-            >
-              千葉県
-            </a>
+            <dl>
+              <dt>Data by:</dt>
+              <dd>
+                <a
+                  href="https://www.pref.chiba.lg.jp/"
+                  target="_blank"
+                  rel="noopener"
+                  class="sponsor__data"
+                >
+                  {{ $t('Chiba Prefecture') }}
+                </a>
+              </dd>
+              <dd>
+                <a
+                  href="https://www.city.chiba.jp/hokenfukushi/kenkou/kikaku/kansensyoujyouhou.html"
+                  target="_blank"
+                  rel="noopener"
+                  class="sponsor__data"
+                >
+                  {{ $t('Chiba City') }}
+                </a>
+              </dd>
+            </dl>
           </div>
           <div class="sponsor">
             Operations by:<br />
@@ -124,13 +138,13 @@
     "COVID-19": "新型コロナウイルス感染症",
     "Measures site": "対策サイト",
     "Chiba Prefecture": "千葉県",
-    "Chiba COVID-19 Task Force": "新型コロナウイルス感染症対策本部(非公式)",
+    "Chiba City": "千葉市",
     "The latest updates": "県内の最新感染動向",
-    "If you have any symptoms": "新型コロナウイルス感染症が心配なときに",
     "for Families with children": "お子様をお持ちの皆様へ",
     "for Citizens": "県民の皆様へ",
     "for Enterprises and Employees": "企業の皆様・はたらく皆様へ",
     "Official statements from Task Force": "新型コロナウイルス感染症への対応について",
+    "About information counter": "電話相談窓口について",
     "Cancelled public events": "臨時休館情報",
     "Government official website": "千葉県公式ホームページ",
     "Message from Governor Morita": "知事からのメッセージ",
@@ -160,12 +174,13 @@ export default {
           title: this.$t('The latest updates'),
           link: '/'
         },
-        {
-          icon: 'covid',
-          title: this.$t('If you have any symptoms'),
-          link: '/flow',
-          divider: true
-        },
+        // {
+        //   icon: 'covid',
+        //   title: this.$t('If you have any symptoms'),
+        //   link:
+        //     'https://www.pref.chiba.lg.jp/shippei/kansenshou/2019-ncov.html',
+        //   divider: true
+        // },
         {
           icon: 'parent',
           title: this.$t('for Families with children'),
@@ -188,9 +203,15 @@ export default {
             'https://www.pref.chiba.lg.jp/cate/kfk/kenkou-iryou/kenkouzukuri/kansenshou/coronavirus.html'
         },
         {
+          title: this.$t('About information counter'),
+          link:
+            'https://www.pref.chiba.lg.jp/kenfuku/kansenshou/singata-koronauirusu-kannrennhaienn.html'
+        },
+        {
           title: this.$t('Cancelled public events'),
           link:
-            'https://www.pref.chiba.lg.jp/kouhou/homepage/2019/ncov-index.html'
+            'https://www.pref.chiba.lg.jp/kouhou/homepage/2019/ncov-index.html',
+          divider: true
         },
         {
           title: this.$t('Message from Governor Morita'),
@@ -307,6 +328,10 @@ export default {
     width: 100%;
     z-index: z-index-of(opened-side-navigation);
     background-color: $white;
+    /* stylelint-disable */
+    overflow-y: scroll; // TODO: Issue#81の暫定対応
+    /* stylelint-enable */
+    -webkit-overflow-scrolling: touch;
   }
 }
 @include largerThan($small) {
@@ -347,7 +372,7 @@ export default {
     margin-top: 12px;
   }
 
-  &__pref {
+  &__data {
     font-size: 26px;
     text-decoration: none;
     color: $gray-1;

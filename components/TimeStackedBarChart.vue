@@ -1,7 +1,6 @@
 <template>
   <data-view :title="title" :title-id="titleId" :date="date">
-    <template v-slot:button>
-      <p class="Graph-Desc" />
+    <template #button>
       <data-selector v-model="dataKind" />
     </template>
     <bar
@@ -10,12 +9,15 @@
       :options="options"
       :height="240"
     />
-    <template v-slot:infoPanel>
+    <template #infoPanel>
       <data-view-basic-info-panel
         :l-text="displayInfo.lText"
         :s-text="displayInfo.sText"
         :unit="displayInfo.unit"
       />
+    </template>
+    <template #supplement>
+      <slot name="supplement" />
     </template>
   </data-view>
 </template>
@@ -120,26 +122,19 @@ export default {
       const unit = this.unit
       const sumArray = this.eachArraySum(this.chartData)
       const data = this.chartData
-      const cumulativeData = this.chartData.map(item => {
-        return this.cumulative(item)
-      })
-      const cumulativeSumArray = this.eachArraySum(cumulativeData)
       return {
         tooltips: {
           displayColors: false,
           callbacks: {
             label: tooltipItem => {
-              const labelText =
-                this.dataKind === 'transition'
-                  ? `${sumArray[tooltipItem.index]}${unit}（患者: ${
-                      data[0][tooltipItem.index]
-                    }/無症状病原体保有者: ${data[1][tooltipItem.index]}）`
-                  : `${cumulativeSumArray[tooltipItem.index]}${unit}（患者: ${
-                      cumulativeData[0][tooltipItem.index]
-                    }/無症状病原体保有者: ${
-                      cumulativeData[1][tooltipItem.index]
-                    }）`
-              return labelText
+              const selectedSum = `${sumArray[tooltipItem.index]}${unit}`
+              const sumByTitle = this.items
+                .map(
+                  (itemTitle, index) =>
+                    `${itemTitle}: ${data[index][tooltipItem.index]}`
+                )
+                .reduce((acc, labelByTitle) => `${acc} / ${labelByTitle}`)
+              return `${selectedSum}（${sumByTitle}）`
             },
             title(tooltipItem, data) {
               return data.labels[tooltipItem[0].index].replace(

@@ -18,7 +18,7 @@ const config: Configuration = {
         hid: 'description',
         name: 'description',
         content:
-          '当サイトは新型コロナウイルス感染症（COVID-19）に関する最新情報を提供するために、千葉県(非公式)が開設したものです。'
+          '当サイトは新型コロナウイルス感染症（COVID-19）に関する最新情報を提供するために、千葉県が開設したものです。'
       },
       {
         hid: 'og:site_name',
@@ -29,7 +29,7 @@ const config: Configuration = {
       {
         hid: 'og:url',
         property: 'og:url',
-        content: 'https://development-civictechzenchiba-covid19.netlify.com'
+        content: 'https://covid19.civictech.chiba.jp'
       },
       {
         hid: 'og:title',
@@ -40,13 +40,12 @@ const config: Configuration = {
         hid: 'og:description',
         property: 'og:description',
         content:
-          '当サイトは新型コロナウイルス感染症（COVID-19）に関する最新情報を提供するために、千葉県(非公式)が開設したものです。'
+          '当サイトは新型コロナウイルス感染症（COVID-19）に関する最新情報を提供するために、千葉県が開設したものです。'
       },
       {
         hid: 'og:image',
         property: 'og:image',
-        content:
-          'https://development-civictechzenchiba-covid19.netlify.com/ogp.png'
+        content: 'https://covid19.civictech.chiba.jp/ogp.png'
       },
       {
         hid: 'twitter:card',
@@ -66,8 +65,7 @@ const config: Configuration = {
       {
         hid: 'twitter:image',
         name: 'twitter:image',
-        content:
-          'https://development-civictechzenchiba-covid19.netlify.com/ogp.png'
+        content: 'https://covid19.civictech.chiba.jp/ogp.png'
       }
     ],
     link: [
@@ -151,7 +149,7 @@ const config: Configuration = {
     }
   },
   googleAnalytics: {
-    id: 'UA-159417676-1'
+    id: 'UA-160710762-1'
   },
   build: {
     postcss: {

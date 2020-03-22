@@ -1,6 +1,6 @@
 Chiba Covid19 response site contributors
 ============================================
-
+​
 本サイトにご協力いただいた皆様
 
 | Name(link) | Contribution |
@@ -15,9 +15,7 @@ Chiba Covid19 response site contributors
 | [Taro Matsuzawa(Georepublic)](https://twitter.com/smellman) | Data processing | 
 | [TuttiMouse(CIvicTechZenChiba)](https://twitter.com/tutti666)| Mascot character | 
 | [potyam(student)](https://twitter.com/PotyaExea) | Frontend |
-
+​
 | SpecialThanks | 
 | [(project menbero fJust DOU IT)](https://stopcovid19.hokkaido.dev) |
 ご協力に感謝です！！！
-
-!
