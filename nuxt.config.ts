@@ -114,11 +114,41 @@ const config: Configuration = {
     [
       'nuxt-i18n',
       {
-        strategy: 'no_prefix',
+        strategy: 'prefix_except_default',
+        detectBrowserLanguage: {
+          useCookie: true,
+          cookieKey: 'i18n_redirected'
+        },
         locales: [
           {
             code: 'ja',
-            iso: 'ja-JP'
+            name: '日本語',
+            iso: 'ja-JP',
+            file: 'ja.i18n.json'
+          },
+          {
+            code: 'en',
+            name: 'English',
+            iso: 'en-US',
+            file: 'en.i18n.json'
+          },
+          {
+            code: 'zh-cn',
+            name: '简体中文',
+            iso: 'zh-CN',
+            file: 'zh-cn.i18n.json'
+          },
+          {
+            code: 'zh-tw',
+            name: '繁體中文',
+            iso: 'zh-TW',
+            file: 'zh-tw.i18n.json'
+          },
+          {
+            code: 'ko',
+            name: '한국어',
+            iso: 'ko-KR',
+            file: 'ko.i18n.json'
           }
         ],
         defaultLocale: 'ja',
@@ -126,7 +156,9 @@ const config: Configuration = {
           fallbackLocale: 'ja',
           formatFallbackMessages: true
         },
-        vueI18nLoader: true
+        vueI18nLoader: true,
+        lazy: true,
+        langDir: './assets/locales/'
       }
     ],
     'nuxt-svg-loader',

@@ -9,18 +9,18 @@
     <static-info
       class="mb-4"
       url="https://www.pref.chiba.lg.jp/kenfuku/kansenshou/corona-soudancenter.html#meyasu"
-      :text="'自分や家族の症状に不安や心配があればまずは電話相談をどうぞ'"
-      :btn-text="'相談の手順を見る'"
+      :text="$t('自分や家族の症状に不安や心配があればまずは電話相談をどうぞ')"
+      :btn-text="$t('相談の手順を見る')"
     />
     <v-row class="DataBlock">
       <v-col cols="12" md="6" class="DataCard">
         <svg-card
-          title="検査陽性者の状況"
+          :title="$t('検査陽性者の状況')"
           :title-id="'details-of-confirmed-cases'"
           :date="headerItem.date"
         >
           <confirmed-cases-table
-            aria-label="検査陽性者の状況"
+            :aria-label="$t('検査陽性者の状況')"
             v-bind="confirmedCases"
           />
         </svg-card>
@@ -40,7 +40,7 @@
         />
         -->
         <time-stacked-bar-chart
-          title="陽性反応者数の推移"
+          :title="$t('陽性反応者数の推移')"
           :title-id="'number-of-tested'"
           :chart-id="'time-stacked-bar-chart-inspections'"
           :chart-data="patientsAndNoSymptomsGraph"
@@ -51,16 +51,18 @@
         >
           <template #supplement>
             <p class="Graph-Desc">
-              無症状病原体保有者：症状は無いがＰＣＲ検査が陽性だった者で、
-              他者へ感染させる可能性は低いとみられている。（出典：厚生労働省Ｑ＆Ａ一部改
-              変）
+              {{
+                $t(
+                  '無症状病原体保有者：症状は無いがＰＣＲ検査が陽性だった者で、他者へ感染させる可能性は低いとみられている。（出典：厚生労働省Ｑ＆Ａ一部改変）'
+                )
+              }}
             </p>
           </template>
         </time-stacked-bar-chart>
       </v-col>
       <v-col cols="12" md="6" class="DataCard">
         <data-table
-          :title="'陽性患者の属性'"
+          :title="$t('陽性患者の属性')"
           :title-id="'attributes-of-confirmed-cases'"
           :chart-data="patientsTable"
           :chart-option="{}"
@@ -73,7 +75,7 @@
       </v-col>
       <v-col cols="12" md="6" class="DataCard">
         <time-stacked-bar-chart
-          title="検査実施数"
+          :title="$t('検査実施数')"
           :title-id="'number-of-tested'"
           :chart-id="'time-stacked-bar-chart-inspections'"
           :chart-data="inspectionsGraph"
@@ -201,7 +203,7 @@ export default {
       sumInfoOfPatients,
       headerItem: {
         icon: 'mdi-chart-timeline-variant',
-        title: '県内の最新感染動向',
+        title: this.$t('県内の最新感染動向'),
         date: Data.lastUpdate
       },
       newsItems: News.newsItems,
@@ -257,7 +259,7 @@ export default {
   },
   head() {
     return {
-      title: '県内の最新感染動向'
+      title: this.$t('県内の最新感染動向')
     }
   }
 }
