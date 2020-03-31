@@ -1,16 +1,18 @@
 <template>
   <div class="Parent">
     <h2 class="Parent-Heading">
-      臨時休校中の新型コロナウイルス感染症対応についてのお願い
+      {{ $t('臨時休校中の新型コロナウイルス感染症対応についてのお願い') }}
     </h2>
     <div v-for="(item, i) in items" :key="i">
-      <TextCard :title="item.title" :body="item.body" />
+      <TextCard :title="$t(item.title)" :body="$t(item.body)" />
     </div>
   </div>
 </template>
 <script lang="ts">
+import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
 import TextCard from '@/components/TextCard.vue'
-export default {
+export default Vue.extend({
   components: {
     TextCard
   },
@@ -35,12 +37,12 @@ export default {
       ]
     }
   },
-  head() {
+  head(): MetaInfo {
     return {
-      title: 'お子様をお持ちの皆様へ'
+      title: this.$t('お子様をお持ちの皆様へ') as string
     }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 .Parent {

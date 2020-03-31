@@ -7,8 +7,11 @@
       {{ title }}
     </h2>
     <div class="date">
-      <span>最終更新 </span>
-      <time :datetime="formattedDate">{{ date }}</time>
+      <i18n path="最終更新 {updatedDate}" tag="span">
+        <template #updatedDate>
+          <time>{{ date }}</time>
+        </template>
+      </i18n>
     </div>
   </div>
 </template>

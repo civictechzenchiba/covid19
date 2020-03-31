@@ -21,9 +21,9 @@
       <div class="DataView-Footer__supplement">
         <slot name="supplement" />
       </div>
-      <time :datetime="formattedDate" class="DataView-Footer__time"
-        >{{ date }} 更新</time
-      >
+      <time :datetime="formattedDate" class="DataView-Footer__time">
+        {{ $t('{date} 更新', { date: date }) }}
+      </time>
       <!-- <a
         v-if="url"
         class="OpenDataLink"

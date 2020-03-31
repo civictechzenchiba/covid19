@@ -1,16 +1,18 @@
 <template>
   <div class="Worker">
     <h2 class="Worker-Heading">
-      企業の皆様・はたらく皆様へ
+      {{ $t('企業の皆様・はたらく皆様へ') }}
     </h2>
     <div v-for="(item, i) in items" :key="i">
-      <TextCard :title="item.title" :body="item.body" />
+      <TextCard :title="$t(item.title)" :body="$t(item.body)" />
     </div>
   </div>
 </template>
 <script lang="ts">
+import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
 import TextCard from '@/components/TextCard.vue'
-export default {
+export default Vue.extend({
   components: {
     TextCard
   },
@@ -50,12 +52,12 @@ export default {
       ]
     }
   },
-  head() {
+  head(): MetaInfo {
     return {
-      title: '企業の皆様・はたらく皆様へ'
+      title: this.$t('企業の皆様・はたらく皆様へ') as string
     }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 .Worker {

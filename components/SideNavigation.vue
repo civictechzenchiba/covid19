@@ -3,17 +3,18 @@
     <div class="SideNavigation-HeadingContainer sp-flex">
       <v-icon
         class="SideNavigation-HeadingIcon pc-none"
-        :aria-label="$t('Navi Open')"
+        :aria-label="$t('サイドメニュー項目を開く')"
         @click="openNavi"
       >
         mdi-menu
       </v-icon>
       <nuxt-link to="/" class="SideNavigation-HeadingLink">
         <div class="SideNavigation-Logo">
-          <img src="/logo.svg" :alt="$t('Prefecture')" />
+          <img src="/logo.svg" :alt="$t('千葉県')" />
         </div>
         <h1 class="SideNavigation-Heading">
-          {{ $t('COVID-19') }}<br />{{ $t('Measures site') }}
+          {{ $t('新型コロナウイルス感染症') }}<br />
+          {{ $t('対策サイト') }}
         </h1>
       </nuxt-link>
     </div>
@@ -21,11 +22,16 @@
     <div class="sp-none" :class="{ open: isNaviOpen }">
       <v-icon
         class="SideNavigation-ListContainerIcon pc-none"
-        :aria-label="$t('Navi Close')"
+        :aria-label="$t('サイドメニュー項目を閉じる')"
         @click="closeNavi"
       >
         mdi-close
       </v-icon>
+
+      <div class="SideNavigation-LanguageMenu">
+        <LanguageSelector />
+      </div>
+      <v-divider class="SideNavigation-HeadingDivider" />
       <v-list :flat="true">
         <v-container
           v-for="(item, i) in items"
@@ -92,7 +98,7 @@
                   rel="noopener"
                   class="sponsor__data"
                 >
-                  {{ $t('Chiba Prefecture') }}
+                  {{ $t('千葉県') }}
                 </a>
               </dd>
               <dd>
@@ -102,7 +108,7 @@
                   rel="noopener"
                   class="sponsor__data"
                 >
-                  {{ $t('Chiba City') }}
+                  {{ $t('千葉市') }}
                 </a>
               </dd>
             </dl>
@@ -128,36 +134,14 @@
   </div>
 </template>
 
-<i18n>
-{
-  "ja": {
-    "Navi Open": "サイドメニュー項目を開く",
-    "Navi Close": "サイドメニュー項目を閉じる",
-    "Prefecture": "千葉県",
-    "COVID-19": "新型コロナウイルス感染症",
-    "Measures site": "対策サイト",
-    "Chiba Prefecture": "千葉県",
-    "Chiba City": "千葉市",
-    "The latest updates": "県内の最新感染動向",
-    "for Families with children": "お子様をお持ちの皆様へ",
-    "for Citizens": "県民の皆様へ",
-    "for Enterprises and Employees": "企業の皆様・はたらく皆様へ",
-    "Official statements from Task Force": "新型コロナウイルス感染症への対応について",
-    "About information counter": "電話相談窓口について",
-    "Cancelled public events": "臨時休館情報",
-    "Government official website": "千葉県公式ホームページ",
-    "Message from Governor Morita": "知事からのメッセージ",
-    "About us": "当サイトについて"
-  }
-}
-</i18n>
-
 <script>
 import ListItem from '@/components/ListItem'
+import LanguageSelector from '@/components/LanguageSelector.vue'
 
 export default {
   components: {
-    ListItem
+    ListItem,
+    LanguageSelector
   },
   props: {
     isNaviOpen: {
@@ -170,8 +154,8 @@ export default {
       return [
         {
           icon: 'mdi-chart-timeline-variant',
-          title: this.$t('The latest updates'),
-          link: '/'
+          title: this.$t('県内の最新感染動向'),
+          link: this.localePath('/')
         },
         // {
         //   icon: 'covid',
@@ -182,47 +166,47 @@ export default {
         // },
         {
           icon: 'parent',
-          title: this.$t('for Families with children'),
-          link: '/parent'
+          title: this.$t('お子様をお持ちの皆様へ'),
+          link: this.localePath('/parent')
         },
         {
           icon: 'mdi-account-multiple',
-          title: this.$t('for Citizens'),
+          title: this.$t('県民の皆様へ'),
           link: 'https://www.pref.chiba.lg.jp/shippei/kansenshou/2019-ncov.html'
         },
         {
           icon: 'mdi-domain',
-          title: this.$t('for Enterprises and Employees'),
-          link: '/worker',
+          title: this.$t('企業の皆様・はたらく皆様へ'),
+          link: this.localePath('/worker'),
           divider: true
         },
         {
-          title: this.$t('Official statements from Task Force'),
+          title: this.$t('新型コロナウイルス感染症への対応について'),
           link:
             'https://www.pref.chiba.lg.jp/cate/kfk/kenkou-iryou/kenkouzukuri/kansenshou/coronavirus.html'
         },
         {
-          title: this.$t('About information counter'),
+          title: this.$t('電話相談窓口について'),
           link:
             'https://www.pref.chiba.lg.jp/kenfuku/kansenshou/corona-soudan.html'
         },
         {
-          title: this.$t('Cancelled public events'),
+          title: this.$t('臨時休館情報'),
           link:
             'https://www.pref.chiba.lg.jp/kouhou/homepage/2019/ncov-index.html',
           divider: true
         },
         {
-          title: this.$t('Message from Governor Morita'),
+          title: this.$t('知事からのメッセージ'),
           link:
             'https://www.pref.chiba.lg.jp/kenfuku/kansenshou/ncov/mes-chiji.html'
         },
         {
-          title: this.$t('About us'),
-          link: '/about'
+          title: this.$t('当サイトについて'),
+          link: this.localePath('/about')
         },
         {
-          title: this.$t('Government official website'),
+          title: this.$t('千葉県公式ホームページ'),
           link: 'https://www.pref.chiba.lg.jp/',
           divider: true
         }
@@ -267,7 +251,7 @@ export default {
     text-decoration: none;
   }
   &-ListContainerIcon {
-    margin: 24px 16px 0;
+    margin: 24px 16px 24px;
   }
   &-ListItemContainer {
     padding: 2px 20px;
@@ -290,7 +274,7 @@ export default {
     }
   }
   &-HeadingDivider {
-    margin: 0px 20px 4px;
+    margin: 12px 20px 4px;
     @include lessThan($small) {
       display: none;
     }
