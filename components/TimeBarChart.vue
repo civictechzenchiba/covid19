@@ -85,7 +85,10 @@ export default {
       if (this.dataKind === 'transition') {
         return {
           lText: `${this.chartData.slice(-1)[0].transition.toLocaleString()}`,
-          sText: `実績値（前日比：${this.displayTransitionRatio} ${this.unit}）`,
+          sText: this.$t('実績値（前日比：{change} {unit}）', {
+            change: this.displayTransitionRatio,
+            unit: this.unit
+          }),
           unit: this.unit
         }
       }
@@ -93,9 +96,11 @@ export default {
         lText: this.chartData[
           this.chartData.length - 1
         ].cumulative.toLocaleString(),
-        sText: `${this.chartData.slice(-1)[0].label} 累計値（前日比：${
-          this.displayCumulativeRatio
-        } ${this.unit}）`,
+        sText: this.$t('{date} 累計値（前日比：{change} {unit}）', {
+          date: this.chartData.slice(-1)[0].label,
+          change: this.displayCumulativeRatio,
+          unit: this.unit
+        }),
         unit: this.unit
       }
     },

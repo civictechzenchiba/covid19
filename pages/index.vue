@@ -47,7 +47,7 @@
           :date="Data.patients_and_no_symptoms_summary.date"
           :items="patientsAndNoSymptomsItems"
           :labels="patientsAndNoSymptomsLabels"
-          :unit="'件'"
+          :unit="$t('件')"
         >
           <template #supplement>
             <p class="Graph-Desc">
@@ -82,7 +82,7 @@
           :date="Data.inspections_summary.date"
           :items="inspectionsItems"
           :labels="inspectionsLabels"
-          :unit="'件'"
+          :unit="$t('件')"
         />
       </v-col>
       <!-- <v-col cols="12" md="6" class="DataCard">
