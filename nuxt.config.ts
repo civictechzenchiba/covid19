@@ -69,6 +69,13 @@ const config: Configuration = {
         content: 'https://covid19.civictech.chiba.jp/ogp.png'
       }
     ],
+    script: [
+      {
+        src:
+          'https://storage.googleapis.com/obotai-hosting-for-customers/covid19/loader.js',
+        body: true
+      }
+    ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'apple-touch-icon', href: '/apple-touch-icon-precomposed.png' }

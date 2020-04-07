@@ -1,9 +1,11 @@
 <template>
   <v-app class="app">
-    <div v-if="loading" class="loader">
-      <img src="/logo.svg" alt="千葉県" />
-      <scale-loader color="#00A040" />
-    </div>
+    <v-overlay v-if="loading" color="#F8F9FA" opacity="1" z-index="9999">
+      <div class="loader">
+        <img src="/logo.svg" alt="千葉県" />
+        <scale-loader color="#00A040" />
+      </div>
+    </v-overlay>
     <div v-else class="appContainer">
       <div class="naviContainer">
         <SideNavigation
