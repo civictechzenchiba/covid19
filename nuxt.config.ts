@@ -5,7 +5,7 @@ const environment = process.env.NODE_ENV || 'development'
 const config: Configuration = {
   mode: 'universal',
   router: {
-    base: '/covid19-chiba/'
+    base: '/'
   },
   /*
    ** Headers of the page
