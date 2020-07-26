@@ -4,17 +4,10 @@ const environment = process.env.NODE_ENV || 'development'
 
 const config: Configuration = {
   mode: 'universal',
-  router: {
-    base: '/'
-  },
   /*
    ** Headers of the page
    */
   head: {
-    base: {
-      href: 'router.base',
-      target: ''
-    },
     htmlAttrs: {
       prefix: 'og: http://ogp.me/ns#'
     },
@@ -77,7 +70,7 @@ const config: Configuration = {
       }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'apple-touch-icon', href: '/apple-touch-icon-precomposed.png' }
     ]
   },
@@ -178,9 +171,15 @@ const config: Configuration = {
           whitelistPatterns: [/(col|row)/]
         })
       ]
-    }
+    },
     // https://ja.nuxtjs.org/api/configuration-build/#hardsource
     // hardSource: process.env.NODE_ENV === 'development'
+    babel: {
+      presets({ isServer }) {
+        const targets = isServer ? { node: 'current' } : { ie: 11 }
+        return [[require.resolve('@nuxt/babel-preset-app'), { targets }]]
+      }
+    }
   },
   manifest: {
     name: '千葉県 新型コロナウイルス感染症対策サイト',

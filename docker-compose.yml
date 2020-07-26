@@ -1,9 +1,15 @@
-version: "3.7"
+version: "3"
 services:
-  covid19:
-    build: .
-    command: yarn install && yarn dev
+  app:
+    container_name: covid19
+    build:
+      context: .
+      dockerfile: Dockerfile
+    tty: true
     ports:
         - 3000:3000
     volumes:
-        - .:/usr/src/app
+        - .:/app
+        - node_modules:/app/node_modules
+volumes:
+  node_modules: {}

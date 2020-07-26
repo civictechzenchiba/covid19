@@ -1,12 +1,11 @@
-name: production deploy
+name: build check
 
 on:
-  push:
+  pull_request:
     branches:
-      - master
-
+      - staging
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
@@ -28,9 +27,8 @@ jobs:
       - run: yarn run test
       - run: yarn run generate:deploy --fail-on-page-error
 
-      - name: deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: archive dist
+        uses: actions/upload-artifact@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: production
+          name: dist
+          path: dist

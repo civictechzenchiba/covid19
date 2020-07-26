@@ -11,7 +11,7 @@
       <h1 class="SideNavigation-Heading">
         <nuxt-link :to="localePath('/')" class="SideNavigation-HeadingLink">
           <div class="SideNavigation-HeaderLogo">
-            <img src="logo.svg" :alt="$t('Prefecture')" />
+            <img src="/logo.svg" :alt="$t('Prefecture')" />
           </div>
           <div class="SideNavigation-HeaderLogoLinkText">
             {{ $t('COVID-19') }}<br />{{ $t('Measures site') }}
@@ -39,8 +39,8 @@
             class="SideNavigation-SocialLink"
           >
             <picture>
-              <source srcset="github.webp" type="image/webp" />
-              <img src="github.png" alt="GitHub" />
+              <source srcset="/github.webp" type="image/webp" />
+              <img src="/github.png" alt="GitHub" />
             </picture>
           </a>
         </div>
