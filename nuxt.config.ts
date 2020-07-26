@@ -171,9 +171,15 @@ const config: Configuration = {
           whitelistPatterns: [/(col|row)/]
         })
       ]
-    }
+    },
     // https://ja.nuxtjs.org/api/configuration-build/#hardsource
     // hardSource: process.env.NODE_ENV === 'development'
+    babel: {
+      presets({ isServer }) {
+        const targets = isServer ? { node: 'current' } : { ie: 11 }
+        return [[require.resolve('@nuxt/babel-preset-app'), { targets }]]
+      }
+    }
   },
   manifest: {
     name: '千葉県 新型コロナウイルス感染症対策サイト',

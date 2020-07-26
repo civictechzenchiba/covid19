@@ -176,12 +176,14 @@ export default {
             data.hospital_count +
             data.hospital_waiting_count +
             data.hotel_stay_count +
-            data.home_stay_count,
+            data.home_stay_count +
+            data.other_count,
           軽症中等症:
             data.hospital_count +
             data.hospital_waiting_count +
             data.hotel_stay_count +
-            data.home_stay_count -
+            data.home_stay_count +
+            data.other_count -
             data.severe_injury_count,
           重症: data.severe_injury_count,
           死亡: data.death_count,
