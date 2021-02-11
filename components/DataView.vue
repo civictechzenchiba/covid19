@@ -5,7 +5,6 @@
         <h3 :id="titleId" class="DataView-ToolbarTitle">
           {{ title }}
         </h3>
-        <slot name="note" />
         <slot name="button" />
       </div>
       <v-spacer />
