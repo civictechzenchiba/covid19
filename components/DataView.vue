@@ -5,7 +5,13 @@
         <h3 :id="titleId" class="DataView-ToolbarTitle">
           {{ title }}
         </h3>
-        <slot name="button" />
+        <div class="DataView-Description">
+          <slot name="description" />
+        </div>
+
+        <div>
+          <slot name="button" />
+        </div>
       </div>
       <v-spacer />
       <slot name="infoPanel" />

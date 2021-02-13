@@ -54,6 +54,7 @@
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.0",
     "@mdi/font": "^4.9.95",
+    "@mdi/js": "5.8.55",
     "@nuxt/babel-preset-app": "2.13.3",
     "@nuxt/typescript-build": "^0.6.0",
     "@nuxtjs/eslint-config-typescript": "^1.0.2",
@@ -70,6 +71,7 @@
     "jest": "^24.1.0",
     "lint-staged": "^10.0.8",
     "nodemon": "^1.18.9",
+    "nuxt-property-decorator": "2.9.1",
     "nuxt-purgecss": "^0.2.1",
     "nuxt-svg-loader": "^1.2.0",
     "prettier": "^1.19.1",

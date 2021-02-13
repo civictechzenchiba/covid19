@@ -12,7 +12,7 @@
       value="transition"
       class="DataSelector-Button"
     >
-      {{ $t('日別') }}
+      {{ '日別' }}
     </v-btn>
     <v-btn
       v-ripple="false"
@@ -20,7 +20,7 @@
       value="cumulative"
       class="DataSelector-Button"
     >
-      {{ $t('累計') }}
+      {{ '累計' }}
     </v-btn>
   </v-btn-toggle>
 </template>

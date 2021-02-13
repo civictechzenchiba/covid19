@@ -175,7 +175,7 @@ const config: Configuration = {
     // https://ja.nuxtjs.org/api/configuration-build/#hardsource
     // hardSource: process.env.NODE_ENV === 'development'
     babel: {
-      presets({ isServer }) {
+      presets({ isServer }: { isServer: any }) {
         const targets = isServer ? { node: 'current' } : { ie: 11 }
         return [[require.resolve('@nuxt/babel-preset-app'), { targets }]]
       }
@@ -191,7 +191,11 @@ const config: Configuration = {
     splash_pages: null
   },
   generate: {
-    fallback: true
+    fallback: true,
+    routes() {
+      const pages = ['/cards/number-of-confirmed-cases']
+      return [...pages]
+    }
   },
   // /*
   // ** hot read configuration for docker

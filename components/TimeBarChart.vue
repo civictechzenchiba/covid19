@@ -1,105 +1,215 @@
 <template>
   <data-view :title="title" :title-id="titleId" :date="date" :url="url">
-    <template v-slot:button>
-      <data-selector v-model="dataKind" :target-id="chartId" />
+    <template v-slot:attentionNote>
+      <slot name="attentionNote" />
     </template>
-    <bar
-      :chart-id="chartId"
-      :chart-data="displayData"
-      :options="displayOption"
-      :height="240"
-    />
+    <template v-slot:description>
+      <slot name="description" />
+    </template>
+
+    <template v-slot:button>
+      <data-selector
+        v-model="dataKind"
+        :target-id="chartId"
+        :style="{ display: canvas ? 'inline-block' : 'none' }"
+      />
+    </template>
+    <h4 :id="`${titleId}-graph`" class="visually-hidden">
+      {{ $t(`{title}のグラフ`, { title }) }}
+    </h4>
+    <scrollable-chart v-show="canvas" :display-data="displayData">
+      <template v-slot:chart="{ chartWidth }">
+        <bar
+          :ref="'barChart'"
+          :chart-id="chartId"
+          :chart-data="displayData"
+          :options="displayOption"
+          :height="240"
+          :width="chartWidth"
+        />
+      </template>
+      <template v-slot:sticky-chart>
+        <bar
+          class="sticky-legend"
+          :chart-id="`${chartId}-header`"
+          :chart-data="displayDataHeader"
+          :options="displayOptionHeader"
+          :plugins="yAxesBgPlugin"
+          :height="240"
+        />
+      </template>
+    </scrollable-chart>
+    <template v-slot:additionalDescription>
+      <slot name="additionalDescription" />
+    </template>
+    <template v-slot:dataTable>
+      <client-only>
+        <data-view-table :headers="tableHeaders" :items="tableData" />
+      </client-only>
+    </template>
     <template v-slot:infoPanel>
-      <data-view-basic-info-panel
+      <data-view-data-set-panel
         :l-text="displayInfo.lText"
         :s-text="displayInfo.sText"
         :unit="displayInfo.unit"
       />
+      <slot v-if="dataKind === 'cumulative'" name="additionalInfoPanel" />
+    </template>
+    <template v-slot:footer>
+      <open-data-link v-show="url" :url="url" />
     </template>
   </data-view>
 </template>
 
-<style></style>
-
-<script>
-import DataView from '@/components/DataView.vue'
+<script lang="ts">
+import { Chart } from 'chart.js'
+import dayjs from 'dayjs'
+import Vue from 'vue'
+import { ThisTypedComponentOptionsWithRecordProps } from 'vue/types/options'
 import DataSelector from '@/components/DataSelector.vue'
-import DataViewBasicInfoPanel from '@/components/DataViewBasicInfoPanel.vue'
+import DataView from '@/components/DataView.vue'
+import DataViewDataSetPanel from '@/components/DataViewDataSetPanel.vue'
+import DataViewTable, {
+  TableHeader,
+  TableItem
+} from '@/components/DataViewTable.vue'
+import OpenDataLink from '@/components/OpenDataLink.vue'
+import ScrollableChart from '@/components/ScrollableChart.vue'
+import { DisplayData, yAxesBgPlugin } from '@/plugins/vue-chart'
+import calcDayBeforeRatio from '@/utils/calcDayBeforeRatio'
+import { getGraphSeriesStyle } from '@/utils/colors'
+import { GraphDataType } from '@/utils/formatGraph'
 
-export default {
-  components: { DataView, DataSelector, DataViewBasicInfoPanel },
+type Data = {
+  dataKind: 'transition' | 'cumulative'
+  canvas: boolean
+}
+type Methods = {}
+type Computed = {
+  displayInfo: {
+    lText: string
+    sText: string
+    unit: string
+  }
+  displayData: DisplayData
+  displayOption: Chart.ChartOptions
+  displayDataHeader: DisplayData
+  displayOptionHeader: Chart.ChartOptions
+  scaledTicksYAxisMax: number
+  tableHeaders: TableHeader[]
+  tableData: TableItem[]
+}
+type Props = {
+  title: string
+  titleId: string
+  chartId: string
+  chartData: GraphDataType[]
+  date: string
+  unit: string
+  url: string
+  yAxesBgPlugin: Chart.PluginServiceRegistrationOptions[]
+  byDate: boolean
+}
+const options: ThisTypedComponentOptionsWithRecordProps<
+  Vue,
+  Data,
+  Methods,
+  Computed,
+  Props
+> = {
+  created() {
+    this.canvas = process.browser
+    this.dataKind =
+      this.$route.query.embed && this.$route.query.dataKind === 'cumulative'
+        ? 'cumulative'
+        : 'transition'
+  },
+  components: {
+    DataView,
+    DataSelector,
+    DataViewDataSetPanel,
+    DataViewTable,
+    ScrollableChart,
+    OpenDataLink
+  },
   props: {
     title: {
       type: String,
-      required: false,
       default: ''
     },
     titleId: {
       type: String,
-      required: false,
       default: ''
     },
     chartId: {
       type: String,
-      required: false,
       default: 'time-bar-chart'
     },
     chartData: {
       type: Array,
-      required: false,
       default: () => []
     },
     date: {
       type: String,
-      required: true,
-      default: ''
+      required: true
     },
     unit: {
       type: String,
-      required: false,
       default: ''
     },
     url: {
       type: String,
-      required: false,
       default: ''
+    },
+    yAxesBgPlugin: {
+      type: Array,
+      default: () => yAxesBgPlugin
+    },
+    byDate: {
+      type: Boolean,
+      default: false
     }
   },
-  data() {
-    return {
-      dataKind: 'transition'
-    }
-  },
+  data: () => ({
+    dataKind: 'transition',
+    canvas: true
+  }),
   computed: {
-    displayCumulativeRatio() {
-      const lastDay = this.chartData.slice(-1)[0].cumulative
-      const lastDayBefore = this.chartData.slice(-2)[0].cumulative
-      return this.formatDayBeforeRatio(lastDay - lastDayBefore)
-    },
-    displayTransitionRatio() {
-      const lastDay = this.chartData.slice(-1)[0].transition
-      const lastDayBefore = this.chartData.slice(-2)[0].transition
-      return this.formatDayBeforeRatio(lastDay - lastDayBefore)
-    },
     displayInfo() {
-      if (this.dataKind === 'transition') {
+      const { lastDay, lastDayData, dayBeforeRatio } = calcDayBeforeRatio({
+        displayData: this.displayData,
+        dataIndex: 1
+      })
+      const formattedLastDay = new Date(lastDay).toLocaleDateString()
+      if (this.dataKind === 'transition' && this.byDate) {
         return {
-          lText: `${this.chartData.slice(-1)[0].transition.toLocaleString()}`,
-          sText: `実績値（前日比：${this.displayTransitionRatio} ${this.unit}）`,
+          lText: lastDayData,
+          sText: `${formattedLastDay} ${this.$t('日別値')}（${this.$t(
+            '前日比'
+          )}: ${dayBeforeRatio} ${this.unit}）`,
+          unit: this.unit
+        }
+      } else if (this.dataKind === 'transition') {
+        return {
+          lText: lastDayData,
+          sText: `${formattedLastDay} ${this.$t('実績値')}（${this.$t(
+            '前日比'
+          )}: ${dayBeforeRatio} ${this.unit}）`,
           unit: this.unit
         }
       }
       return {
-        lText: this.chartData[
-          this.chartData.length - 1
-        ].cumulative.toLocaleString(),
-        sText: `${this.chartData.slice(-1)[0].label} 累計値（前日比：${
-          this.displayCumulativeRatio
-        } ${this.unit}）`,
+        lText: lastDayData,
+        sText: `${formattedLastDay} ${this.$t('累計値')}（${this.$t(
+          '前日比'
+        )}: ${dayBeforeRatio} ${this.unit}）`,
         unit: this.unit
       }
     },
     displayData() {
+      const style = getGraphSeriesStyle(1)[0]
+      const zeroMouseOverHeight = 5
+      const transparentWhite = 'rgba(255,255,255,0)'
       if (this.dataKind === 'transition') {
         return {
           labels: this.chartData.map(d => {
@@ -108,51 +218,80 @@ export default {
           datasets: [
             {
               label: this.dataKind,
+              data: this.chartData.map(_d => {
+                return 0
+              }),
+              backgroundColor: transparentWhite,
+              borderColor: transparentWhite,
+              borderWidth: 0,
+              minBarLength: this.chartData.map(d => {
+                if (d.transition <= 0) {
+                  return zeroMouseOverHeight
+                }
+                return 0
+              })
+            },
+            {
+              label: this.dataKind,
               data: this.chartData.map(d => {
                 return d.transition
               }),
-              backgroundColor: '#00B849',
-              borderWidth: 0
+              backgroundColor: style.fillColor,
+              borderColor: style.strokeColor,
+              borderWidth: 1
             }
           ]
         }
       }
       return {
-        labels: this.chartData.map(d => {
-          return d.label
-        }),
+        labels: this.chartData.map(d => d.label),
         datasets: [
+          {
+            label: this.dataKind,
+            data: this.chartData.map(_d => {
+              return 0
+            }),
+            backgroundColor: transparentWhite,
+            borderColor: transparentWhite,
+            borderWidth: 0,
+            minBarLength: this.chartData.map(d => {
+              if (d.cumulative <= 0) {
+                return zeroMouseOverHeight
+              }
+              return 0
+            })
+          },
           {
             label: this.dataKind,
             data: this.chartData.map(d => {
               return d.cumulative
             }),
-            backgroundColor: '#00B849',
-            borderWidth: 0
+            backgroundColor: style.fillColor,
+            borderColor: style.strokeColor,
+            borderWidth: 1
           }
         ]
       }
     },
     displayOption() {
       const unit = this.unit
-      return {
+      const scaledTicksYAxisMax = this.scaledTicksYAxisMax
+      const options: Chart.ChartOptions = {
         tooltips: {
           displayColors: false,
           callbacks: {
-            label(tooltipItem) {
-              const labelText =
-                parseInt(tooltipItem.value).toLocaleString() + unit
+            label: tooltipItem => {
+              const labelText = `${parseInt(
+                tooltipItem.value!
+              ).toLocaleString()} ${unit}`
               return labelText
             },
-            title(tooltipItem, data) {
-              return data.labels[tooltipItem[0].index].replace(
-                /(\w+)\/(\w+)/,
-                '$1月$2日'
-              )
+            title: (tooltipItem, data) => {
+              const label = data.labels![tooltipItem[0].index!] as string
+              return new Date(label).toLocaleDateString()
             }
           }
         },
-        responsive: true,
         maintainAspectRatio: false,
         legend: {
           display: false
@@ -170,11 +309,12 @@ export default {
                 maxTicksLimit: 20,
                 fontColor: '#808080',
                 maxRotation: 0,
-                minRotation: 0,
-                callback: label => {
-                  return label.split('/')[1]
+                callback: (label: string) => {
+                  return dayjs(label).format('D')
                 }
               }
+              // #2384: If you set "type" to "time", make sure that the bars at both ends are not hidden.
+              // #2384: typeをtimeに設定する時はグラフの両端が見切れないか確認してください
             },
             {
               id: 'month',
@@ -189,66 +329,179 @@ export default {
                 fontSize: 11,
                 fontColor: '#808080',
                 padding: 3,
-                fontStyle: 'bold',
-                gridLines: {
-                  display: true
-                },
-                callback: label => {
-                  const monthStringArry = [
-                    'Jan',
-                    'Feb',
-                    'Mar',
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec'
-                  ]
-                  const month = monthStringArry.indexOf(label.split(' ')[0]) + 1
-                  return month + '月'
-                }
+                fontStyle: 'bold'
               },
               type: 'time',
               time: {
-                unit: 'month'
+                unit: 'month',
+                displayFormats: {
+                  month: 'YYYY-MM'
+                }
               }
             }
           ],
           yAxes: [
             {
-              location: 'bottom',
-              stacked: true,
+              position: 'left',
               gridLines: {
                 display: true,
+                drawOnChartArea: true,
                 color: '#E5E5E5'
               },
               ticks: {
-                suggestedMin: 0,
                 maxTicksLimit: 8,
-                fontColor: '#808080'
+                fontColor: '#808080',
+                suggestedMin: 0,
+                suggestedMax: scaledTicksYAxisMax
               }
             }
           ]
         }
       }
+      if (this.$route.query.ogp === 'true') {
+        Object.assign(options, { animation: { duration: 0 } })
+      }
+      return options
+    },
+    displayDataHeader() {
+      if (this.dataKind === 'transition') {
+        return {
+          labels: ['2020-01-01'],
+          datasets: [
+            {
+              data: [Math.max(...this.chartData.map(d => d.transition))],
+              backgroundColor: 'transparent',
+              borderWidth: 0
+            }
+          ]
+        }
+      }
+      return {
+        labels: ['2020-01-01'],
+        datasets: [
+          {
+            data: [Math.max(...this.chartData.map(d => d.cumulative))],
+            backgroundColor: 'transparent',
+            borderWidth: 0
+          }
+        ]
+      }
+    },
+    displayOptionHeader() {
+      const scaledTicksYAxisMax = this.scaledTicksYAxisMax
+      const options: Chart.ChartOptions = {
+        tooltips: { enabled: false },
+        maintainAspectRatio: false,
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [
+            {
+              id: 'day',
+              stacked: true,
+              gridLines: {
+                display: false
+              },
+              ticks: {
+                fontSize: 9,
+                maxTicksLimit: 20,
+                fontColor: 'transparent', // displayOption では '#808080'
+                maxRotation: 0,
+                callback: (label: string) => {
+                  return dayjs(label).format('D')
+                }
+              }
+            },
+            {
+              id: 'month',
+              stacked: true,
+              gridLines: {
+                drawOnChartArea: false,
+                drawTicks: false, // displayOption では true
+                drawBorder: false,
+                tickMarkLength: 10
+              },
+              ticks: {
+                fontSize: 11,
+                fontColor: 'transparent', // displayOption では '#808080'
+                padding: 13, // 3 + 10(tickMarkLength)，displayOption では 3
+                fontStyle: 'bold'
+              },
+              type: 'time',
+              time: {
+                unit: 'month',
+                displayFormats: {
+                  month: 'YYYY-MM'
+                }
+              }
+            }
+          ],
+          yAxes: [
+            {
+              position: 'left',
+              gridLines: {
+                display: true,
+                drawOnChartArea: false, // displayOption では true
+                color: '#E5E5E5'
+              },
+              ticks: {
+                maxTicksLimit: 8,
+                fontColor: '#808080',
+                suggestedMin: 0,
+                suggestedMax: scaledTicksYAxisMax
+              }
+            }
+          ]
+        },
+        animation: { duration: 0 }
+      }
+      return options
+    },
+    scaledTicksYAxisMax() {
+      const dataKind =
+        this.dataKind === 'transition' ? 'transition' : 'cumulative'
+      const values = this.chartData.map(d => d[dataKind])
+      return Math.max(...values)
+    },
+    tableHeaders() {
+      return [
+        { text: this.$t('日付'), value: 'text' },
+        {
+          text: `${this.title} (${this.$t('日別')})`,
+          value: 'transition',
+          align: 'end'
+        },
+        {
+          text: `${this.title} (${this.$t('累計')})`,
+          value: 'cumulative',
+          align: 'end'
+        }
+      ]
+    },
+    tableData() {
+      return this.chartData
+        .map((d, _) => {
+          return {
+            text: d.label,
+            transition: d.transition.toLocaleString(),
+            cumulative: d.cumulative.toLocaleString()
+          }
+        })
+        .sort((a, b) => dayjs(a.text).unix() - dayjs(b.text).unix())
+        .reverse()
     }
   },
-  methods: {
-    formatDayBeforeRatio(dayBeforeRatio) {
-      const dayBeforeRatioLocaleString = dayBeforeRatio.toLocaleString()
-      switch (Math.sign(dayBeforeRatio)) {
-        case 1:
-          return `+${dayBeforeRatioLocaleString}`
-        case -1:
-          return `${dayBeforeRatioLocaleString}`
-        default:
-          return `${dayBeforeRatioLocaleString}`
-      }
+  mounted() {
+    const barChart = this.$refs.barChart as Vue
+    const barElement = barChart.$el
+    const canvas = barElement.querySelector('canvas')
+    const labelledbyId = `${this.titleId}-graph`
+    if (canvas) {
+      canvas.setAttribute('role', 'img')
+      canvas.setAttribute('aria-labelledby', labelledbyId)
     }
   }
 }
+export default Vue.extend(options)
 </script>
